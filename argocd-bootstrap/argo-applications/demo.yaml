@@ -22,30 +22,9 @@ spec:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments  # Can point to either a Helm chart repo or a git repo.
     targetRevision: HEAD  # For Helm, this refers to the chart version.
     path: applications/demo-app  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
-    helm:
-      valueFiles:
-      - values.yaml
-
-      # values: |
-      #   replicaCount: 1
-
-      #   image:
-      #     repository: rslim087/kubernetes-course-grade-submission-api
-      #     tag: stateless
-      #     pullPolicy: IfNotPresent
-
-      #   service:
-      #     type: ClusterIP
-      #     port: 3000
-      #     targetPort: 3000
-
-      #   resources:
-      #     limits:
-      #       cpu: 500m
-      #       memory: 256Mi
-      #     requests:
-      #       cpu: 250m
-      #       memory: 128Mi
+    # helm:
+    #   valueFiles:
+    #   - values.yaml
 
   # Destination cluster and namespace to deploy the application
   destination:
