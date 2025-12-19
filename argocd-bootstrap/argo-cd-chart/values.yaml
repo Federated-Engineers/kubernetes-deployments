@@ -32,7 +32,7 @@ crds:
   # -- Install and upgrade CRDs
   install: true
   # -- Keep CRDs on chart uninstall
-  keep: false
+  keep: true
   # -- Annotations to be added to all CRDs
   annotations: {}
   # -- Additional labels to be added to all CRDs
@@ -201,6 +201,85 @@ configs:
     ## Ref: https://argo-cd.readthedocs.io/en/stable/user-guide/status-badge/
     statusbadge.enabled: false
 
+    # Dex configuration
+    # dex.config: |
+    #   connectors:
+    #     # GitHub example
+    #     - type: github
+    #       id: github
+    #       name: GitHub
+    #       config:
+    #         clientID: aabbccddeeff00112233
+    #         clientSecret: $dex.github.clientSecret # Alternatively $<some_K8S_secret>:dex.github.clientSecret
+    #         orgs:
+    #         - name: your-github-org
+
+    # OIDC configuration as an alternative to dex (optional).
+    # oidc.config: |
+    #   name: AzureAD
+    #   issuer: https://login.microsoftonline.com/TENANT_ID/v2.0
+    #   clientID: aaaabbbbccccddddeee
+    #   clientSecret: $oidc.azuread.clientSecret
+
+    # Some OIDC providers require a separate clientID for different callback URLs.
+    # For example, if configuring Argo CD with self-hosted Dex, you will need a separate client ID
+    # for the 'localhost' (CLI) client to Dex. This field is optional. If omitted, the CLI will
+    # use the same clientID as the Argo CD server
+    #   cliClientID: vvvvwwwwxxxxyyyyzzzz
+
+    #   rootCA: |
+    #     -----BEGIN CERTIFICATE-----
+    #     ... encoded certificate data here ...
+    #     -----END CERTIFICATE-----
+
+    # Optional list of allowed aud claims. If omitted or empty, defaults to the clientID value above (and the
+    # cliClientID, if that is also specified). If you specify a list and want the clientID to be allowed, you must
+    # explicitly include it in the list.
+    # Token verification will pass if any of the token's audiences matches any of the audiences in this list.
+    #   allowedAudiences:
+    #     - aaaabbbbccccddddeee
+    #     - qqqqwwwweeeerrrrttt
+
+    # Optional set of OIDC claims to request on the ID token.
+    #   requestedIDTokenClaims:
+    #     groups:
+    #       essential: true
+
+    # Optional set of OIDC scopes to request. If omitted, defaults to: ["openid", "profile", "email", "groups"]
+    #   requestedScopes:
+    #     - openid
+    #     - profile
+    #     - email
+
+    # PKCE authentication flow processes authorization flow from browser only - default false
+    # uses the clientID
+    # make sure the Identity Provider (IdP) is public and doesn't need clientSecret
+    # make sure the Identity Provider (IdP) has this redirect URI registered: https://argocd.example.com/pkce/verify
+    #   enablePKCEAuthentication: true
+
+    # Extension Configuration
+    ## Ref: https://argo-cd.readthedocs.io/en/latest/developer-guide/extensions/proxy-extensions/
+    # extension.config: |
+    #   extensions:
+    #   - name: httpbin
+    #     backend:
+    #       connectionTimeout: 2s
+    #       keepAlive: 15s
+    #       idleConnectionTimeout: 60s
+    #       maxIdleConnections: 30
+    #       services:
+    #       - url: http://httpbin.org
+    #         headers:
+    #         - name: some-header
+    #           value: '$some.argocd.secret.key'
+    #         cluster:
+    #           name: some-cluster
+    #           server: https://some-cluster
+
+    ## Default configuration for ignoreResourceUpdates.
+    ## The ignoreResourceUpdates list contains K8s resource's properties that are known to be frequently updated
+    ## by controllers and operators. These resources, when watched by argo, will cause many unnecessary updates.
+
     # -- Ignoring status for all resources. An update will still be sent if the status update causes the health to change.
     # @default -- See [values.yaml]
     resource.customizations.ignoreResourceUpdates.all: |
@@ -257,6 +336,11 @@ configs:
         - /metadata
         - /subsets
 
+    ## Default configuration for exclusions.
+    ## The exclusion list are K8s resources that we assume will never be declared in Git,
+    ## and are never child objects of managed resources that need to be presented in the resource tree.
+    ## This list contains high volume and  high churn metadata objects which we exclude for performance
+    ## reasons, reducing connections and load to the K8s API servers of managed clusters.
 
     # -- Resource Exclusion/Inclusion
     # @default -- See [values.yaml]
@@ -349,6 +433,17 @@ configs:
     # -- File containing user-defined policies and role definitions.
     # @default -- `''` (See [values.yaml])
     policy.csv: ''
+    # Policy rules are in the form:
+    #  p, subject, resource, action, object, effect
+    # Role definitions and bindings are in the form:
+    #  g, subject, inherited-subject
+    # policy.csv: |
+    #   p, role:org-admin, applications, *, */*, allow
+    #   p, role:org-admin, clusters, get, *, allow
+    #   p, role:org-admin, repositories, *, *, allow
+    #   p, role:org-admin, logs, get, *, allow
+    #   p, role:org-admin, exec, create, */*, allow
+    #   g, your-github-org:your-team, role:org-admin
 
     # -- OIDC scopes to examine during rbac enforcement (in addition to `sub` scope).
     # The scope value can be a string, or a list of strings.
@@ -430,6 +525,37 @@ configs:
 
     # -- Plugin yaml files to be added to argocd-cmp-cm
     plugins: {}
+      # --- First plugin
+      # my-plugin:
+      #   init:
+      #     command: [sh]
+      #     args: [-c, 'echo "Initializing..."']
+      #   generate:
+      #     command: [sh, -c]
+      #     args:
+      #       - |
+      #         echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
+      #   discover:
+      #     fileName: "./subdir/s*.yaml"
+      #     find:
+      #       glob: "**/Chart.yaml"
+      #       command: [sh, -c, find . -name env.yaml]
+
+      # --- Second plugin
+      # my-plugin2:
+      #   init:
+      #     command: [sh]
+      #     args: [-c, 'echo "Initializing..."']
+      #   generate:
+      #     command: [sh, -c]
+      #     args:
+      #       - |
+      #         echo "{\"kind\": \"ConfigMap\", \"apiVersion\": \"v1\", \"metadata\": { \"name\": \"$ARGOCD_APP_NAME\", \"namespace\": \"$ARGOCD_APP_NAMESPACE\", \"annotations\": {\"Foo\": \"$ARGOCD_ENV_FOO\", \"KubeVersion\": \"$KUBE_VERSION\", \"KubeApiVersion\": \"$KUBE_API_VERSIONS\",\"Bar\": \"baz\"}}}"
+      #   discover:
+      #     fileName: "./subdir/s*.yaml"
+      #     find:
+      #       glob: "**/Chart.yaml"
+      #       command: [sh, -c, find . -name env.yaml]
 
   # -- Provide one or multiple [external cluster credentials]
   # @default -- `{}` (See [values.yaml])
@@ -438,6 +564,46 @@ configs:
   ## - https://argo-cd.readthedocs.io/en/stable/operator-manual/security/#external-cluster-credentials
   ## - https://argo-cd.readthedocs.io/en/stable/user-guide/projects/#project-scoped-repositories-and-clusters
   clusterCredentials: {}
+    # mycluster:
+    #   server: https://mycluster.example.com
+    #   labels: {}
+    #   annotations: {}
+    #   config:
+    #     bearerToken: "<authentication token>"
+    #     tlsClientConfig:
+    #       insecure: false
+    #       caData: "<base64 encoded certificate>"
+    # mycluster2:
+    #   server: https://mycluster2.example.com
+    #   labels: {}
+    #   annotations: {}
+    #   namespaces: namespace1,namespace2
+    #   clusterResources: true
+    #   config:
+    #     bearerToken: "<authentication token>"
+    #     tlsClientConfig:
+    #       insecure: false
+    #       caData: "<base64 encoded certificate>"
+    # mycluster3-project-scoped:
+    #   server: https://mycluster3.example.com
+    #   labels: {}
+    #   annotations: {}
+    #   project: my-project1
+    #   config:
+    #     bearerToken: "<authentication token>"
+    #     tlsClientConfig:
+    #       insecure: false
+    #       caData: "<base64 encoded certificate>"
+    # mycluster4-sharded:
+    #   shard: 1
+    #   server: https://mycluster4.example.com
+    #   labels: {}
+    #   annotations: {}
+    #   config:
+    #     bearerToken: "<authentication token>"
+    #     tlsClientConfig:
+    #       insecure: false
+    #       caData: "<base64 encoded certificate>"
 
   # -- Repository credentials to be used as Templates for other repos
   ## Creates a secret for each key/value specified below to create repository credentials
@@ -541,6 +707,31 @@ configs:
 # -- Array of extra K8s manifests to deploy
 ## Note: Supports use of custom Helm templates
 extraObjects: []
+  # - apiVersion: secrets-store.csi.x-k8s.io/v1
+  #   kind: SecretProviderClass
+  #   metadata:
+  #     name: argocd-secrets-store
+  #   spec:
+  #     provider: aws
+  #     parameters:
+  #       objects: |
+  #         - objectName: "argocd"
+  #           objectType: "secretsmanager"
+  #           jmesPath:
+  #               - path: "client_id"
+  #                 objectAlias: "client_id"
+  #               - path: "client_secret"
+  #                 objectAlias: "client_secret"
+  #     secretObjects:
+  #     - data:
+  #       - key: client_id
+  #         objectName: client_id
+  #       - key: client_secret
+  #         objectName: client_secret
+  #       secretName: argocd-secrets-store
+  #       type: Opaque
+  #       labels:
+  #         app.kubernetes.io/part-of: argocd
 
 ## Application controller
 controller:
@@ -653,6 +844,16 @@ controller:
   ## Ref: https://kubernetes.io/docs/reference/access-authn-authz/authentication/#client-go-credential-plugins
   ## Note: Supports use of custom Helm templates
   initContainers: []
+  #  - name: download-tools
+  #    image: alpine:3
+  #    command: [sh, -c]
+  #    args:
+  #      - wget -qO /custom-tools/kubelogin.zip https://github.com/Azure/kubelogin/releases/download/v0.2.7/kubelogin-linux-amd64.zip &&
+  #        mkdir /custom-tools/tmp && unzip -d /custom-tools/tmp /custom-tools/kubelogin.zip  &&
+  #        mv /custom-tools/tmp/bin/linux_amd64/kubelogin /custom-tools/ && rm -rf custom-tools/tmp && rm /custom-tools/kubelogin.zip
+  #    volumeMounts:
+  #      - mountPath: /custom-tools
+  #        name: custom-tools
 
   # -- Additional volumeMounts to the application controller main container
   volumeMounts: []
@@ -843,6 +1044,30 @@ controller:
 
       # -- PrometheusRule.Spec for the application controller
       spec: []
+      # - alert: ArgoAppMissing
+      #   expr: |
+      #     absent(argocd_app_info) == 1
+      #   for: 15m
+      #   labels:
+      #     severity: critical
+      #   annotations:
+      #     summary: "[Argo CD] No reported applications"
+      #     description: >
+      #       Argo CD has not reported any applications data for the past 15 minutes which
+      #       means that it must be down or not functioning properly.  This needs to be
+      #       resolved for this cloud to continue to maintain state.
+      # - alert: ArgoAppNotSynced
+      #   expr: |
+      #     argocd_app_info{sync_status!="Synced"} == 1
+      #   for: 12h
+      #   labels:
+      #     severity: warning
+      #   annotations:
+      #     summary: "[{{`{{$labels.name}}`}}] Application not synchronized"
+      #     description: >
+      #       The application [{{`{{$labels.name}}`}} has not been synchronized for over
+      #       12 hours which means that the state of this cloud has drifted away from the
+      #       state inside Git.
 
   ## Enable this and set the rules: to whatever custom rules you want for the Cluster Role resource.
   ## Defaults to off
@@ -866,7 +1091,7 @@ controller:
 ## Dex
 dex:
   # -- Enable dex
-  enabled: false
+  enabled: true
   # -- Dex name
   name: dex-server
 
@@ -1807,6 +2032,12 @@ server:
     # @default -- `[]` (See [values.yaml])
     ## Ref: https://github.com/argoproj-labs/argocd-extension-metrics#install-ui-extension
     extensionList: []
+    #  - name: extension-metrics
+    #    env:
+    #      - name: EXTENSION_URL
+    #        value: https://github.com/argoproj-labs/argocd-extension-metrics/releases/download/v1.0.0/extension.tar.gz
+    #      - name: EXTENSION_CHECKSUM_URL
+    #        value: https://github.com/argoproj-labs/argocd-extension-metrics/releases/download/v1.0.0/extension_checksums.txt
 
     # -- Server UI extensions container-level security context
     # @default -- See [values.yaml]
@@ -1833,12 +2064,41 @@ server:
   # -- Additional containers to be added to the server pod
   ## Note: Supports use of custom Helm templates
   extraContainers: []
+  # - name: my-sidecar
+  #   image: nginx:latest
+  # - name: lemonldap-ng-controller
+  #   image: lemonldapng/lemonldap-ng-controller:0.2.0
+  #   args:
+  #     - /lemonldap-ng-controller
+  #     - --alsologtostderr
+  #     - --configmap=$(POD_NAMESPACE)/lemonldap-ng-configuration
+  #   env:
+  #     - name: POD_NAME
+  #       valueFrom:
+  #         fieldRef:
+  #           fieldPath: metadata.name
+  #     - name: POD_NAMESPACE
+  #       valueFrom:
+  #         fieldRef:
+  #           fieldPath: metadata.namespace
+  #   volumeMounts:
+  #   - name: copy-portal-skins
+  #     mountPath: /srv/var/lib/lemonldap-ng/portal/skins
 
   # -- Init containers to add to the server pod
   ## If your target Kubernetes cluster(s) require a custom credential (exec) plugin
   ## you could use this (and the same in the application controller pod) to provide such executable
   ## Ref: https://kubernetes.io/docs/reference/access-authn-authz/authentication/#client-go-credential-plugins
   initContainers: []
+  #  - name: download-tools
+  #    image: alpine:3
+  #    command: [sh, -c]
+  #    args:
+  #      - wget -qO /custom-tools/kubelogin.zip https://github.com/Azure/kubelogin/releases/download/v0.2.7/kubelogin-linux-amd64.zip &&
+  #        mkdir /custom-tools/tmp && unzip -d /custom-tools/tmp /custom-tools/kubelogin.zip  &&
+  #        mv /custom-tools/tmp/bin/linux_amd64/kubelogin /custom-tools/ && rm -rf custom-tools/tmp && rm /custom-tools/kubelogin.zip
+  #    volumeMounts:
+  #      - mountPath: /custom-tools
   #        name: custom-tools
 
   # -- Additional volumeMounts to the server main container
@@ -2034,7 +2294,7 @@ server:
     # -- Server service labels
     labels: {}
     # -- Server service type
-    type: NodePort
+    type: ClusterIP
     # -- Server service http port for NodePort service type (only if `server.service.type` is set to "NodePort")
     nodePortHttp: 30080
     # -- Server service https port for NodePort service type (only if `server.service.type` is set to "NodePort")
@@ -2536,6 +2796,46 @@ repoServer:
   ## Ref: https://argo-cd.readthedocs.io/en/stable/user-guide/config-management-plugins/
   ## Note: Supports use of custom Helm templates
   extraContainers: []
+    # - name: cmp-my-plugin
+    #   command:
+    #     - "/var/run/argocd/argocd-cmp-server"
+    #   image: busybox
+    #   securityContext:
+    #     runAsNonRoot: true
+    #     runAsUser: 999
+    #   volumeMounts:
+    #     - mountPath: /var/run/argocd
+    #       name: var-files
+    #     - mountPath: /home/argocd/cmp-server/plugins
+    #       name: plugins
+    #     # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
+    #     - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+    #       subPath: my-plugin.yaml
+    #       name: argocd-cmp-cm
+    #     # Starting with v2.4, do NOT mount the same tmp volume as the repo-server container. The filesystem separation helps
+    #     # mitigate path traversal attacks.
+    #     - mountPath: /tmp
+    #       name: cmp-tmp
+    # - name: cmp-my-plugin2
+    #   command:
+    #     - "/var/run/argocd/argocd-cmp-server"
+    #   image: busybox
+    #   securityContext:
+    #     runAsNonRoot: true
+    #     runAsUser: 999
+    #   volumeMounts:
+    #     - mountPath: /var/run/argocd
+    #       name: var-files
+    #     # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
+    #     - mountPath: /home/argocd/cmp-server/plugins
+    #       name: plugins
+    #     - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+    #       subPath: my-plugin2.yaml
+    #       name: argocd-cmp-cm
+    #     # Starting with v2.4, do NOT mount the same tmp volume as the repo-server container. The filesystem separation helps
+    #     # mitigate path traversal attacks.
+    #     - mountPath: /tmp
+    #       name: cmp-tmp
 
   # -- Init containers to add to the repo server pods
   initContainers: []
@@ -3198,7 +3498,7 @@ applicationSet:
 ## Notifications controller
 notifications:
   # -- Enable notifications controller
-  enabled: false
+  enabled: true
 
   # -- Notifications controller name string
   name: notifications-controller
@@ -3495,10 +3795,274 @@ notifications:
   # -- Contains centrally managed global application subscriptions
   ## For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/subscriptions/
   subscriptions: []
+    # # subscription for on-sync-status-unknown trigger notifications
+    # - recipients:
+    #   - slack:test2
+    #   - email:test@gmail.com
+    #   triggers:
+    #   - on-sync-status-unknown
+    # # subscription restricted to applications with matching labels only
+    # - recipients:
+    #   - slack:test3
+    #   selector: test=true
+    #   triggers:
+    #   - on-sync-status-unknown
+
+  # -- The notification template is used to generate the notification content
+  ## For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/templates/
+  templates: {}
+    # template.app-deployed: |
+    #   email:
+    #     subject: New version of an application {{.app.metadata.name}} is up and running.
+    #   message: |
+    #     {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} is now running new version of deployments manifests.
+    #   slack:
+    #     attachments: |
+    #       [{
+    #         "title": "{{ .app.metadata.name}}",
+    #         "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+    #         "color": "#18be52",
+    #         "fields": [
+    #         {
+    #           "title": "Sync Status",
+    #           "value": "{{.app.status.sync.status}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Repository",
+    #           "value": "{{.app.spec.source.repoURL}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Revision",
+    #           "value": "{{.app.status.sync.revision}}",
+    #           "short": true
+    #         }
+    #         {{range $index, $c := .app.status.conditions}}
+    #         {{if not $index}},{{end}}
+    #         {{if $index}},{{end}}
+    #         {
+    #           "title": "{{$c.type}}",
+    #           "value": "{{$c.message}}",
+    #           "short": true
+    #         }
+    #         {{end}}
+    #         ]
+    #       }]
+    # template.app-health-degraded: |
+    #   email:
+    #     subject: Application {{.app.metadata.name}} has degraded.
+    #   message: |
+    #     {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} has degraded.
+    #     Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+    #   slack:
+    #     attachments: |-
+    #       [{
+    #         "title": "{{ .app.metadata.name}}",
+    #         "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+    #         "color": "#f4c030",
+    #         "fields": [
+    #         {
+    #           "title": "Sync Status",
+    #           "value": "{{.app.status.sync.status}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Repository",
+    #           "value": "{{.app.spec.source.repoURL}}",
+    #           "short": true
+    #         }
+    #         {{range $index, $c := .app.status.conditions}}
+    #         {{if not $index}},{{end}}
+    #         {{if $index}},{{end}}
+    #         {
+    #           "title": "{{$c.type}}",
+    #           "value": "{{$c.message}}",
+    #           "short": true
+    #         }
+    #         {{end}}
+    #         ]
+    #       }]
+    # template.app-sync-failed: |
+    #   email:
+    #     subject: Failed to sync application {{.app.metadata.name}}.
+    #   message: |
+    #     {{if eq .serviceType "slack"}}:exclamation:{{end}}  The sync operation of application {{.app.metadata.name}} has failed at {{.app.status.operationState.finishedAt}} with the following error: {{.app.status.operationState.message}}
+    #     Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+    #   slack:
+    #     attachments: |-
+    #       [{
+    #         "title": "{{ .app.metadata.name}}",
+    #         "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+    #         "color": "#E96D76",
+    #         "fields": [
+    #         {
+    #           "title": "Sync Status",
+    #           "value": "{{.app.status.sync.status}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Repository",
+    #           "value": "{{.app.spec.source.repoURL}}",
+    #           "short": true
+    #         }
+    #         {{range $index, $c := .app.status.conditions}}
+    #         {{if not $index}},{{end}}
+    #         {{if $index}},{{end}}
+    #         {
+    #           "title": "{{$c.type}}",
+    #           "value": "{{$c.message}}",
+    #           "short": true
+    #         }
+    #         {{end}}
+    #         ]
+    #       }]
+    # template.app-sync-running: |
+    #   email:
+    #     subject: Start syncing application {{.app.metadata.name}}.
+    #   message: |
+    #     The sync operation of application {{.app.metadata.name}} has started at {{.app.status.operationState.startedAt}}.
+    #     Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+    #   slack:
+    #     attachments: |-
+    #       [{
+    #         "title": "{{ .app.metadata.name}}",
+    #         "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+    #         "color": "#0DADEA",
+    #         "fields": [
+    #         {
+    #           "title": "Sync Status",
+    #           "value": "{{.app.status.sync.status}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Repository",
+    #           "value": "{{.app.spec.source.repoURL}}",
+    #           "short": true
+    #         }
+    #         {{range $index, $c := .app.status.conditions}}
+    #         {{if not $index}},{{end}}
+    #         {{if $index}},{{end}}
+    #         {
+    #           "title": "{{$c.type}}",
+    #           "value": "{{$c.message}}",
+    #           "short": true
+    #         }
+    #         {{end}}
+    #         ]
+    #       }]
+    # template.app-sync-status-unknown: |
+    #   email:
+    #     subject: Application {{.app.metadata.name}} sync status is 'Unknown'
+    #   message: |
+    #     {{if eq .serviceType "slack"}}:exclamation:{{end}} Application {{.app.metadata.name}} sync is 'Unknown'.
+    #     Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}.
+    #     {{if ne .serviceType "slack"}}
+    #     {{range $c := .app.status.conditions}}
+    #         * {{$c.message}}
+    #     {{end}}
+    #     {{end}}
+    #   slack:
+    #     attachments: |-
+    #       [{
+    #         "title": "{{ .app.metadata.name}}",
+    #         "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+    #         "color": "#E96D76",
+    #         "fields": [
+    #         {
+    #           "title": "Sync Status",
+    #           "value": "{{.app.status.sync.status}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Repository",
+    #           "value": "{{.app.spec.source.repoURL}}",
+    #           "short": true
+    #         }
+    #         {{range $index, $c := .app.status.conditions}}
+    #         {{if not $index}},{{end}}
+    #         {{if $index}},{{end}}
+    #         {
+    #           "title": "{{$c.type}}",
+    #           "value": "{{$c.message}}",
+    #           "short": true
+    #         }
+    #         {{end}}
+    #         ]
+    #       }]
+    # template.app-sync-succeeded: |
+    #   email:
+    #     subject: Application {{.app.metadata.name}} has been successfully synced.
+    #   message: |
+    #     {{if eq .serviceType "slack"}}:white_check_mark:{{end}} Application {{.app.metadata.name}} has been successfully synced at {{.app.status.operationState.finishedAt}}.
+    #     Sync operation details are available at: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true .
+    #   slack:
+    #     attachments: |-
+    #       [{
+    #         "title": "{{ .app.metadata.name}}",
+    #         "title_link":"{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+    #         "color": "#18be52",
+    #         "fields": [
+    #         {
+    #           "title": "Sync Status",
+    #           "value": "{{.app.status.sync.status}}",
+    #           "short": true
+    #         },
+    #         {
+    #           "title": "Repository",
+    #           "value": "{{.app.spec.source.repoURL}}",
+    #           "short": true
+    #         }
+    #         {{range $index, $c := .app.status.conditions}}
+    #         {{if not $index}},{{end}}
+    #         {{if $index}},{{end}}
+    #         {
+    #           "title": "{{$c.type}}",
+    #           "value": "{{$c.message}}",
+    #           "short": true
+    #         }
+    #         {{end}}
+    #         ]
+    #       }]
+
   # -- The trigger defines the condition when the notification should be sent
   ## For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/triggers/
   triggers: {}
-
+    # trigger.on-deployed: |
+    #   - description: Application is synced and healthy. Triggered once per commit.
+    #     oncePer: app.status.sync.revision
+    #     send:
+    #     - app-deployed
+    #     when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+    # trigger.on-health-degraded: |
+    #   - description: Application has degraded
+    #     send:
+    #     - app-health-degraded
+    #     when: app.status.health.status == 'Degraded'
+    # trigger.on-sync-failed: |
+    #   - description: Application syncing has failed
+    #     send:
+    #     - app-sync-failed
+    #     when: app.status.operationState.phase in ['Error', 'Failed']
+    # trigger.on-sync-running: |
+    #   - description: Application is being synced
+    #     send:
+    #     - app-sync-running
+    #     when: app.status.operationState.phase in ['Running']
+    # trigger.on-sync-status-unknown: |
+    #   - description: Application status is 'Unknown'
+    #     send:
+    #     - app-sync-status-unknown
+    #     when: app.status.sync.status == 'Unknown'
+    # trigger.on-sync-succeeded: |
+    #   - description: Application syncing has succeeded
+    #     send:
+    #     - app-sync-succeeded
+    #     when: app.status.operationState.phase in ['Succeeded']
+    #
+    # For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/triggers/#default-triggers
+    # defaultTriggers: |
+    #   - on-sync-status-unknown
 
   # Default notifications controller's network policy
   networkPolicy:
