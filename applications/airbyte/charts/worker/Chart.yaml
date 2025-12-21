@@ -1,6 +1,0 @@
-apiVersion: v2
-appVersion: 2.0.1
-description: Helm chart to deploy airbyte-worker
-name: worker
-type: application
-version: 1.9.2
