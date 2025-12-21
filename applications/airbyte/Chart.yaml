@@ -1,0 +1,7 @@
+apiVersion: v2
+name: airbyte
+version: 1.0.0
+dependencies:
+  - name: airbyte
+    version: 0.46.0
+    repository: https://airbytehq.github.io/helm-charts/

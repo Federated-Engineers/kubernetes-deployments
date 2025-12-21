@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo
+  name: airflow
   # You'll usually want to add your resources to the argocd namespace.
   namespace: default
   # Add this finalizer ONLY if you want these to cascade delete.
@@ -19,12 +19,12 @@ spec:
 
   # Source of the application manifests
   source:
-    repoURL: https://github.com/Federated-Engineers/kubernetes-deployments  # Can point to either a Helm chart repo or a git repo.
+    repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git  # Can point to either a Helm chart repo or a git repo.
     targetRevision: HEAD  # For Helm, this refers to the chart version.
-    path: applications/demo-app  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
-    # helm:
-    #   valueFiles:
-    #   - values.yaml
+    path: airflow  # This has no meaning for Helm charts pulled directly from a Helm repo instead of git.
+    helm:
+      valueFiles:
+      - values.yaml
 
   # Destination cluster and namespace to deploy the application
   destination:
