@@ -79,8 +79,8 @@ airflowVersion: "3.0.2"
 # Images
 images:
   airflow:
-    repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
-    tag: version-a5163dc44ac1ee3a518c6f384c51575943c98f63
+    repository: 340752803932.dkr.ecr.eu-north-1.amazonaws.com/airflow
+    tag: version-eb65817add93600f13620324c0c729b513f4c197   #ArgoCD Pointer
     # Specifying digest takes precedence over tag.
     digest: ~
     pullPolicy: IfNotPresent
@@ -372,7 +372,7 @@ rbac:
 # For Airflow <3.0, LocalKubernetesExecutor and CeleryKubernetesExecutor are also supported.
 # Specify executors in a prioritized list to leverage multiple execution environments as needed:
 # https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/index.html#using-multiple-executors-concurrently
-executor: "CeleryExecutor"
+executor: "KubernetesExecutor"
 
 # If this is true and using LocalExecutor/KubernetesExecutor/CeleryKubernetesExecutor, the scheduler's
 # service account will have access to communicate with the api-server and launch pods.
@@ -1771,7 +1771,7 @@ webserver:
 
 # Airflow Triggerer Config
 triggerer:
-  enabled: true
+  enabled: false
   # Number of airflow triggerers in the deployment
   replicas: 1
   # Max number of old replicasets to retain
@@ -1835,7 +1835,7 @@ triggerer:
     # Volume size for triggerer StatefulSet
     size: 100Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
-    storageClassName:
+    storageClassName: ebs-sc
     # Execute init container to chown log directory.
     # This is currently only needed in kind, due to usage
     # of local-path provisioner.
@@ -2584,7 +2584,7 @@ pgbouncer:
 
 # Configuration for the redis provisioned by the chart
 redis:
-  enabled: true
+  enabled: false
   terminationGracePeriodSeconds: 600
 
   # Annotations for Redis Statefulset
@@ -2618,7 +2618,7 @@ redis:
     # Volume size for worker StatefulSet
     size: 1Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
-    storageClassName:
+    storageClassName: ebs-sc
     # Annotations to add to redis volumes
     annotations: {}
     # the name of an existing PVC to use
