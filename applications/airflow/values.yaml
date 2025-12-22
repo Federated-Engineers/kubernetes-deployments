@@ -79,8 +79,8 @@ airflowVersion: "3.0.2"
 # Images
 images:
   airflow:
-    repository: ~
-    tag: ~
+    repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
+    tag: version-a5163dc44ac1ee3a518c6f384c51575943c98f63
     # Specifying digest takes precedence over tag.
     digest: ~
     pullPolicy: IfNotPresent
