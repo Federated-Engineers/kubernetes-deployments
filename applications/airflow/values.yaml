@@ -79,7 +79,7 @@ airflowVersion: "3.0.2"
 # Images
 images:
   airflow:
-    repository: 340752803932.dkr.ecr.eu-north-1.amazonaws.com/airflow
+    repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
     tag: version-eb65817add93600f13620324c0c729b513f4c197   #ArgoCD Pointer
     # Specifying digest takes precedence over tag.
     digest: ~
