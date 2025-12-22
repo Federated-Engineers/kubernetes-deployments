@@ -68,7 +68,7 @@ airflowHome: /opt/airflow
 defaultAirflowRepository: apache/airflow
 
 # Default airflow tag to deploy
-defaultAirflowTag: "3.0.2"
+defaultAirflowTag: version-eb65817add93600f13620324c0c729b513f4c197 #"3.0.2"
 
 # Default airflow digest. If specified, it takes precedence over tag
 defaultAirflowDigest: ~
