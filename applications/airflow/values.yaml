@@ -80,7 +80,7 @@ airflowVersion: "3.0.2"
 images:
   airflow:
     repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
-    tag: version-eb65817add93600f13620324c0c729b513f4c197   #ArgoCD Pointer
+    tag: version-6b213a3bd10710242319282313a097cf62890895
     # Specifying digest takes precedence over tag.
     digest: ~
     pullPolicy: IfNotPresent
