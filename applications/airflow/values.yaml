@@ -2733,7 +2733,7 @@ ports:
   statsdScrape: 9102
   pgbouncer: 6543
   pgbouncerScrape: 9127
-  apiServer: 8081 # changed to accomodate argoCD
+  apiServer: 8080 # changed to accomodate argoCD
 
 # Define any ResourceQuotas for namespace
 quotas: {}
