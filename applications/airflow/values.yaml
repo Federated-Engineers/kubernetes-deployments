@@ -2725,7 +2725,7 @@ opensearch:
 # All ports used by chart
 ports:
   flowerUI: 5555
-  airflowUI: 8080
+  airflowUI: 8081
   workerLogs: 8793
   triggererLogs: 8794
   redisDB: 6379
@@ -2733,7 +2733,7 @@ ports:
   statsdScrape: 9102
   pgbouncer: 6543
   pgbouncerScrape: 9127
-  apiServer: 8080
+  apiServer: 8081 # changed to accomodate argoCD
 
 # Define any ResourceQuotas for namespace
 quotas: {}
