@@ -80,7 +80,7 @@ airflowVersion: "3.0.2"
 images:
   airflow:
     repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
-    tag: version-95937baa2d84698d056fb77ba84b7c5c5208a308
+    tag: version-fa324185adad2bf635ef27557965abf5df7f7e39
 
     # Specifying digest takes precedence over tag.
     digest: ~
@@ -1396,7 +1396,7 @@ apiServer:
     # Annotations to add to Airflow API server kubernetes service account.
     annotations: {}
   service:
-    type: NodePort
+    type: ClusterIP
     ## service annotations
     annotations: {}
     ports:
@@ -1707,7 +1707,7 @@ webserver:
   webserverConfigConfigMapName: ~
 
   service:
-    type: NodePort
+    type: ClusterIP
     ## service annotations
     annotations: {}
     ports:
