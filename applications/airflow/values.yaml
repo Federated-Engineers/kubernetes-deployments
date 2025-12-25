@@ -1707,7 +1707,7 @@ webserver:
   webserverConfigConfigMapName: ~
 
   service:
-    type: ClusterIP
+    type: NodePort
     ## service annotations
     annotations: {}
     ports:
