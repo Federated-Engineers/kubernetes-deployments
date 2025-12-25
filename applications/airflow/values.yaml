@@ -81,6 +81,7 @@ images:
   airflow:
     repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
     tag: version-fa324185adad2bf635ef27557965abf5df7f7e39
+
     # Specifying digest takes precedence over tag.
     digest: ~
     pullPolicy: IfNotPresent
@@ -1835,7 +1836,7 @@ triggerer:
     # Volume size for triggerer StatefulSet
     size: 100Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
-    storageClassName: ebs-sc
+    storageClassName:
     # Execute init container to chown log directory.
     # This is currently only needed in kind, due to usage
     # of local-path provisioner.
@@ -2618,7 +2619,7 @@ redis:
     # Volume size for worker StatefulSet
     size: 1Gi
     # If using a custom storageClass, pass name ref to all statefulSets here
-    storageClassName: ebs-sc
+    storageClassName:
     # Annotations to add to redis volumes
     annotations: {}
     # the name of an existing PVC to use
@@ -2725,7 +2726,7 @@ opensearch:
 # All ports used by chart
 ports:
   flowerUI: 5555
-  airflowUI: 8081
+  airflowUI: 8080
   workerLogs: 8793
   triggererLogs: 8794
   redisDB: 6379
@@ -2733,7 +2734,7 @@ ports:
   statsdScrape: 9102
   pgbouncer: 6543
   pgbouncerScrape: 9127
-  apiServer: 8080 # changed to accomodate argoCD
+  apiServer: 8080
 
 # Define any ResourceQuotas for namespace
 quotas: {}
