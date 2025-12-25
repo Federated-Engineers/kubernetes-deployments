@@ -547,8 +547,8 @@ data:
 
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
-fernetKey: JATSQkAR9P_ouy2lEpWQJ3VdUYoTfXvFGZ3AzawEl2E=
-fernetKeySecretName: ~
+fernetKey: fernet-key
+fernetKeySecretName: airflow-fernet-key
 # Add custom annotations to the fernet key secret
 fernetKeySecretAnnotations: {}
 
