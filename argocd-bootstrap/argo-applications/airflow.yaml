@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: airflow
+  namespace: default
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: airflow
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
+    targetRevision: HEAD
+    path: applications/airflow/
+    helm:
+      valueFiles:
+      - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false

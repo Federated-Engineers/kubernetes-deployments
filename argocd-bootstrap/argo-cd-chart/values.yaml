@@ -1091,7 +1091,7 @@ controller:
 ## Dex
 dex:
   # -- Enable dex
-  enabled: true
+  enabled: false
   # -- Dex name
   name: dex-server
 
@@ -3498,7 +3498,7 @@ applicationSet:
 ## Notifications controller
 notifications:
   # -- Enable notifications controller
-  enabled: true
+  enabled: false
 
   # -- Notifications controller name string
   name: notifications-controller
