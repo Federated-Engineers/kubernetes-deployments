@@ -90,7 +90,7 @@ images:
   # to run and wait for DB migrations .
   useDefaultImageForMigration: false
   # timeout (in seconds) for airflow-migrations to complete
-  migrationsWaitTimeout: 500
+  migrationsWaitTimeout: 60
   pod_template:
     # Note that `images.pod_template.repository` and `images.pod_template.tag` parameters
     # can be overridden in `config.kubernetes` section. So for these parameters to have effect
@@ -547,8 +547,8 @@ data:
 
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
-fernetKey: fernet-key
-fernetKeySecretName: airflow-fernet-key
+fernetKey: ~
+fernetKeySecretName: ~
 # Add custom annotations to the fernet key secret
 fernetKeySecretAnnotations: {}
 
