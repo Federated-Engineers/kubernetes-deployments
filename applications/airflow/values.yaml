@@ -548,16 +548,16 @@ data:
 
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
-fernetKey: ~
-fernetKeySecretName: ~
+fernetKey: fernet-key
+fernetKeySecretName: airflow-fernet-key
 # Add custom annotations to the fernet key secret
 fernetKeySecretAnnotations: {}
 
 # Flask secret key for Airflow 3+ Api: `[api] secret_key` in airflow.cfg
-apiSecretKey: ~
+apiSecretKey: api-secret-key
 # Add custom annotations to the api secret
 apiSecretAnnotations: {}
-apiSecretKeySecretName: ~
+apiSecretKeySecretName: airflow-api-secret-key
 
 # Secret key used to encode and decode JWTs: `[api_auth] jwt_secret` in airflow.cfg
 jwtSecret: ~
