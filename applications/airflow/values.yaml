@@ -89,7 +89,7 @@ images:
   # all the 'run-airflow-migrations' and 'wait-for-airflow-migrations' containers/jobs
   # will use the images from 'defaultAirflowRepository:defaultAirflowTag' values
   # to run and wait for DB migrations .
-  useDefaultImageForMigration: true
+  useDefaultImageForMigration: false
   # timeout (in seconds) for airflow-migrations to complete
   migrationsWaitTimeout: 60
   pod_template:
@@ -549,7 +549,7 @@ data:
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
 fernetKey: fernet-key
-fernetKeySecretName: airflow-fernet-key
+fernetKeySecretName: ~
 # Add custom annotations to the fernet key secret
 fernetKeySecretAnnotations: {}
 
@@ -557,7 +557,7 @@ fernetKeySecretAnnotations: {}
 apiSecretKey: api-secret-key
 # Add custom annotations to the api secret
 apiSecretAnnotations: {}
-apiSecretKeySecretName: airflow-api-secret-key
+apiSecretKeySecretName: ~
 
 # Secret key used to encode and decode JWTs: `[api_auth] jwt_secret` in airflow.cfg
 jwtSecret: ~
