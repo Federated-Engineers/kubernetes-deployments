@@ -79,8 +79,8 @@ airflowVersion: "3.0.2"
 # Images
 images:
   airflow:
-    repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
-    tag: version-fa324185adad2bf635ef27557965abf5df7f7e39
+    repository: ~ #049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
+    tag: ~ #version-fa324185adad2bf635ef27557965abf5df7f7e39
 
     # Specifying digest takes precedence over tag.
     digest: ~
@@ -89,7 +89,7 @@ images:
   # all the 'run-airflow-migrations' and 'wait-for-airflow-migrations' containers/jobs
   # will use the images from 'defaultAirflowRepository:defaultAirflowTag' values
   # to run and wait for DB migrations .
-  useDefaultImageForMigration: false
+  useDefaultImageForMigration: true
   # timeout (in seconds) for airflow-migrations to complete
   migrationsWaitTimeout: 60
   pod_template:
@@ -1715,9 +1715,9 @@ webserver:
         port: "{{ .Values.ports.airflowUI }}"
     # To change the port used to access the webserver:
     # ports:
-    #   - name: airflow-ui
-    #     port: 80
-    #     targetPort: airflow-ui
+      # - name: airflow-ui
+      #   port: 80
+      #   targetPort: airflow-ui
     # To only expose a sidecar, not the webserver directly:
     # ports:
     #   - name: only_sidecar
