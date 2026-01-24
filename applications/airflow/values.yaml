@@ -80,7 +80,7 @@ airflowVersion: "3.0.2"
 images:
   airflow:
     repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/airflow
-    tag: version-418453fa8ceb3d2fe731aeb9bc4d358734886dfe
+    tag: version-fa324185adad2bf635ef27557965abf5df7f7e39
 
     # Specifying digest takes precedence over tag.
     digest: ~
@@ -3075,12 +3075,12 @@ logs:
 
   persistence:
     # Enable persistent volume for storing logs
-    enabled: true # modified to true from false
+    enabled: false
     # Volume size for logs
-    size: 10Gi
+    size: 100Gi
     # Annotations for the logs PVC
     annotations: {}
     # If using a custom storageClass, pass name here
-    storageClassName: 
+    storageClassName:
     ## the name of an existing PVC to use
     existingClaim:
