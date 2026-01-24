@@ -548,13 +548,13 @@ data:
 
 # Fernet key settings
 # Note: fernetKey can only be set during install, not upgrade
-fernetKey: fernet-key
+fernetKey: ~
 fernetKeySecretName: ~
 # Add custom annotations to the fernet key secret
 fernetKeySecretAnnotations: {}
 
 # Flask secret key for Airflow 3+ Api: `[api] secret_key` in airflow.cfg
-apiSecretKey: api-secret-key
+apiSecretKey: ~
 # Add custom annotations to the api secret
 apiSecretAnnotations: {}
 apiSecretKeySecretName: ~
@@ -1260,7 +1260,7 @@ createUserJob:
   priorityClassName: ~
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
-  useHelmHooks: true
+  useHelmHooks: false # modified
   applyCustomEnv: true
 
   env: []
@@ -1363,7 +1363,7 @@ migrateDatabaseJob:
   priorityClassName: ~
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
-  useHelmHooks: true
+  useHelmHooks: false
   applyCustomEnv: true
   env: []
 
