@@ -76,7 +76,7 @@ spec:
 
   volumeClaimTemplates:
   - metadata:
-      name: airbyte-volume-db-1
+      name: airbyte-volume-db
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: ebs-sc #modified
