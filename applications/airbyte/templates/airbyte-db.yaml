@@ -79,6 +79,7 @@ spec:
       name: airbyte-volume-db
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      storageClassName: ebs-sc #modified
       resources:
         requests:
           storage: 500Mi
