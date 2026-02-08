@@ -58,7 +58,7 @@ spec:
             - containerPort: 5432
           securityContext: {{- toYaml .Values.postgresql.containerSecurityContext | nindent 12 }}
           volumeMounts:
-            - name: airbyte-volume-db
+            - name: custom-airbyte-volume-db
               mountPath: /var/lib/postgresql/data
       {{- with .Values.postgresql.nodeSelector }}
       nodeSelector:
@@ -76,7 +76,7 @@ spec:
 
   volumeClaimTemplates:
   - metadata:
-      name: airbyte-volume-db
+      name: custom-airbyte-volume-db
     spec:
       accessModes: [ "ReadWriteOnce" ]
       storageClassName: ebs-sc #modified

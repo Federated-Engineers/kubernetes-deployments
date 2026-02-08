@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: airbyte-volume-db
+  name: custom-airbyte-volume-db
 spec:
   accessModes:
     - ReadWriteOnce
