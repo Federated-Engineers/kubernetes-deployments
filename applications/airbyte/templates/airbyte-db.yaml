@@ -82,5 +82,5 @@ spec:
       storageClassName: ebs-sc #modified
       resources:
         requests:
-          storage: 500Mi
+          storage: 600Mi
 {{- end }}
