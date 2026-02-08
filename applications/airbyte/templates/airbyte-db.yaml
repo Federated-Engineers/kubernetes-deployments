@@ -79,7 +79,7 @@ spec:
       name: custom-airbyte-volume-db
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: ebs-sc #modified
+      storageClassName: {{ .Values.postgresql.storageClassName  }} #modified
       resources:
         requests:
           storage: 600Mi

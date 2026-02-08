@@ -1572,6 +1572,9 @@ postgresql:
   # fullnameOverride: *db-hostname
   ## This secret is used in case of postgresql.enabled=true and we would like to specify password for newly created postgresql instance
   # -- Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
+  
+  storageClassName: ebs-sc
+  
   existingSecret: ""
   podSecurityContext:
     # gid=70(postgres)
@@ -1611,7 +1614,7 @@ minio:
     repository: minio/minio
     # -- Minio tag image
     tag: RELEASE.2023-11-20T22-40-07Z
-
+  storageClassName: ebs-sc
   storage:
     volumeClaimValue: 300Mi
 
