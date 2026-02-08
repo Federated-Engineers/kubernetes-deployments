@@ -1574,6 +1574,7 @@ postgresql:
   # -- Name of an existing secret containing the PostgreSQL password ('postgresql-password' key)
   
   storageClassName: ebs-sc
+  volumeClaimValue: 400Mi
   
   existingSecret: ""
   podSecurityContext:

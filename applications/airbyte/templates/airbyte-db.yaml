@@ -82,5 +82,5 @@ spec:
       storageClassName: {{ .Values.postgresql.storageClassName  }} #modified
       resources:
         requests:
-          storage: 600Mi
+          storage: {{ .Values.postgresql.volumeClaimValue  }}
 {{- end }}
