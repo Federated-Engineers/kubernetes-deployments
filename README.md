@@ -1,12 +1,12 @@
 # kubernetes-deployments
 
-This repository contains all the Kubernetes deployment configurations required to provision and manage our core data applications such as airflow and airbyte on Amazon EKS.
+This repository contains all the Kubernetes deployment configurations required to provision and manage our core data applications such as `Airflow` and `Airbyte` on `Amazon Elastic Kubernetes Service - EKS`.
 
 The goal of this repository is simple:
 
-Define infrastructure and application deployments declaratively and manage them using GitOps principles.
+Define infrastructure and application deployments declaratively and manage them with `ArgoCD` using GitOps principles.
 
-Everything here is structured to support a clean, production-ready deployment flow using Argo CD as the GitOps controller.
+Everything here is structured to support a clean, production-ready deployment flow using Argo CD as the `GitOps Controller`.
 
 ## What This Repository Represents
 
