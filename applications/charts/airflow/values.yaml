@@ -393,7 +393,8 @@ volumes: []
 volumeMounts: []
 
 # Secrets for all airflow containers
-secret: []
+secret:
+  namespace: elite-airflow #modified
 # - envName: ""
 #   secretName: ""
 #   secretKey: ""
