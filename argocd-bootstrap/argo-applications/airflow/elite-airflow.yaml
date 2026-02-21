@@ -16,7 +16,7 @@ spec:
     path: applications/charts/airflow/
     helm:
       valueFiles:
-      - ../production-values/elite-airflow-values.yaml
+      - production-values/elite-airflow-values.yaml
 
   destination:
     server: https://kubernetes.default.svc
