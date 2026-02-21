@@ -393,8 +393,7 @@ volumes: []
 volumeMounts: []
 
 # Secrets for all airflow containers
-secret:
-  namespace: elite-airflow #modified
+secret: []
 # - envName: ""
 #   secretName: ""
 #   secretKey: ""
@@ -3085,3 +3084,5 @@ logs:
     storageClassName: ebs-sc
     ## the name of an existing PVC to use
     existingClaim: airflow-logs
+
+secretNamespace: elite-airflow
