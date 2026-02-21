@@ -13,10 +13,10 @@ spec:
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
     targetRevision: HEAD
-    path: applications/airflow/
+    path: applications/charts/airflow/
     helm:
       valueFiles:
-      - values.yaml
+      - applications/production-values/elite-airflow-values.yaml
 
   destination:
     server: https://kubernetes.default.svc
