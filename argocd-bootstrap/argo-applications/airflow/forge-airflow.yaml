@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
     targetRevision: HEAD
-    path: applications/airflow/
+    path: applications/charts/airflow/
     helm:
       valueFiles:
       - ../../production-values/forge-airflow-values.yaml
