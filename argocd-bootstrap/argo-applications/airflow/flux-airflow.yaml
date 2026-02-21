@@ -16,7 +16,7 @@ spec:
     path: applications/airflow/
     helm:
       valueFiles:
-      - values.yaml
+      - ../../production-values/flux-airflow-values.yaml
 
   destination:
     server: https://kubernetes.default.svc
