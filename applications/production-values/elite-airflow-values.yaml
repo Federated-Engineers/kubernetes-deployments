@@ -3084,3 +3084,5 @@ logs:
     storageClassName: ebs-sc
     ## the name of an existing PVC to use
     existingClaim: airflow-logs
+
+secretNamespace: elite-airflow
