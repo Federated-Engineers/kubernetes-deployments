@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
     targetRevision: HEAD
-    path: applications/airbyte/
+    path: applications/charts/airbyte/
     helm:
       valueFiles:
       - values.yaml
