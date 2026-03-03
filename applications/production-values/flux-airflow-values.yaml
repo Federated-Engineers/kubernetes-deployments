@@ -80,7 +80,7 @@ airflowVersion: "3.0.2"
 images:
   airflow:
     repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/flux-airflow
-    tag: version-4997d0fa1cab7bc79440d7e3fdf0248575bdea9d
+    tag: version-ee00a5200a4339faa8aeda48e8eeb517e2125f02
 
     # Specifying digest takes precedence over tag.
     digest: ~
