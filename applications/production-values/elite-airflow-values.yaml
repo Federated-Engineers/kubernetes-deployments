@@ -698,7 +698,7 @@ workers:
 
     # Annotations to add to worker kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   # Allow KEDA autoscaling for Airflow Celery workers
   keda:
@@ -1066,7 +1066,7 @@ scheduler:
 
     # Annotations to add to scheduler kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   # Scheduler pod disruption budget
   podDisruptionBudget:
@@ -1233,7 +1233,7 @@ createUserJob:
 
     # Annotations to add to create user kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   # Launch additional containers into user creation job
   extraContainers: []
@@ -1329,7 +1329,7 @@ migrateDatabaseJob:
 
     # Annotations to add to migrate database job kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   resources: {}
   #  limits:
@@ -1399,7 +1399,7 @@ apiServer:
 
     # Annotations to add to Airflow API server kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
   service:
     type: LoadBalancer
     ## service annotations
@@ -1619,7 +1619,7 @@ webserver:
 
     # Annotations to add to webserver kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   # Webserver pod disruption budget
   podDisruptionBudget:
@@ -1819,7 +1819,7 @@ triggerer:
 
     # Annotations to add to triggerer kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
@@ -2036,7 +2036,7 @@ dagProcessor:
 
     # Annotations to add to dag processor kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-debug
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
