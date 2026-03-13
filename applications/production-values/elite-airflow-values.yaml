@@ -697,7 +697,8 @@ workers:
     name: ~
 
     # Annotations to add to worker kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Allow KEDA autoscaling for Airflow Celery workers
   keda:
@@ -1064,7 +1065,8 @@ scheduler:
     name: ~
 
     # Annotations to add to scheduler kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Scheduler pod disruption budget
   podDisruptionBudget:
@@ -1230,7 +1232,8 @@ createUserJob:
     name: ~
 
     # Annotations to add to create user kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Launch additional containers into user creation job
   extraContainers: []
@@ -1325,7 +1328,8 @@ migrateDatabaseJob:
     name: ~
 
     # Annotations to add to migrate database job kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   resources: {}
   #  limits:
@@ -1394,7 +1398,8 @@ apiServer:
     name: ~
 
     # Annotations to add to Airflow API server kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
   service:
     type: LoadBalancer
     ## service annotations
@@ -1613,7 +1618,8 @@ webserver:
     name: ~
 
     # Annotations to add to webserver kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Webserver pod disruption budget
   podDisruptionBudget:
@@ -1812,7 +1818,8 @@ triggerer:
     name: ~
 
     # Annotations to add to triggerer kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
@@ -2028,7 +2035,8 @@ dagProcessor:
     name: ~
 
     # Annotations to add to dag processor kubernetes service account.
-    annotations: {}
+    annotations: 
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
