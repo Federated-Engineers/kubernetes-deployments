@@ -26,7 +26,7 @@ spec:
       project: default
       source:
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-          targetRevision: HEAD
+          targetRevision: 'appset-test'
           path: application-deployments/data-apps/charts/airflow/
           helm:
             valueFiles:
@@ -37,7 +37,7 @@ spec:
           ref: values
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{variant}}'
+        namespace: '{{namespace}}'
       syncPolicy:
         automated:
           prune: true
