@@ -1,31 +1,32 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: 'prometheus-grafana'
-#   namespace: argocd
-#   labels:
-#     name: 'prometheus-grafana'
-#   finalizers:
-#     - resources-finalizer.argocd.argoproj.io
-#   annotations:  
-#     argocd.argoproj.io/sync-wave: "1"
-#     argocd.argoproj.io/manifest-generate-paths: .
-# spec:
-#   project: default
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: 'prometheus-grafana'
+  namespace: argocd
+  labels:
+    name: 'prometheus-grafana'
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:  
+    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/manifest-generate-paths: .
+spec:
+  project: default
 
-#   source:
-#     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-#     targetRevision: refs/heads/appset-test
-#     path: 'application-deployments/charts/kube-prometheus-stack'
+  source:
+    repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+    targetRevision: refs/heads/appset-test
+    path: 'application-deployments/charts/kube-prometheus-stack'
 
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: monitoring
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
     
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#     syncOptions:
-#     - CreateNamespace=true
-#     - ServerSideApply=true
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    # - ApplyOutOfSyncOnly=true
