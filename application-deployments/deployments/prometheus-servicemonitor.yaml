@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: airflow
+  name: monitoring-airflow-statsd-servicemonitor
   # VARIABLE change to current kubernetes cluster namespace
   namespace: monitoring
   labels:
@@ -11,11 +11,14 @@ spec:
     matchLabels:
       tier: airflow
       component: statsd
-      release: '*-airflow'
+      release: airflow
   namespaceSelector:
     # VARIABLE change to current kubernetes cluster namespace
     matchNames:
-      - '*-airflow'
+      - airflow
+      - elite-airflow
+      - forge-airflow
+      - flux-airflow
   endpoints:
   - port: statsd-scrape
     interval: 30s
