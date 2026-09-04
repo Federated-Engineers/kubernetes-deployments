@@ -25,3 +25,4 @@ spec:
       allowEmpty: true
     syncOptions:
       - CreateNamespace=true
+      - OutofSyncApplyOnly=true
