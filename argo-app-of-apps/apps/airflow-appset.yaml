@@ -23,6 +23,27 @@
 #       finalizers:
 #         - resources-finalizer.argocd.argoproj.io
 #     spec:
+#       ignoreDifferences:
+#         - group: ""
+#           kind: Secret
+#           name: {{.variant}}-webserver-secret-key
+#           jsonPointers:
+#             - /data
+#         # - group: ""
+#         #   kind: Secret
+#         #   name: {{.variant}}-fernet-key
+#         #   jsonPointers:
+#         #     - /data
+#         - group: ""
+#           kind: Secret
+#           name: {{.variant}}-redis-password
+#           jsonPointers:
+#             - /data
+#         - group: ""
+#           kind: Secret
+#           name: {{.variant}}-broker-url
+#           jsonPointers:
+#             - /data
 #       project: default
 #       sources:
 #         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
@@ -44,24 +65,4 @@
 #         syncOptions:
 #         - CreateNamespace=true
 #         - ApplyOutOfSyncOnly=true
-#       ignoreDifferences:
-#         - group: ""
-#           kind: Secret
-#           name: airflow-webserver-secret-key
-#           jsonPointers:
-#             - /data
-#         - group: ""
-#           kind: Secret
-#           name: airflow-fernet-key
-#           jsonPointers:
-#             - /data
-#         - group: ""
-#           kind: Secret
-#           name: airflow-redis-password
-#           jsonPointers:
-#             - /data
-#         - group: ""
-#           kind: Secret
-#           name: airflow-broker-url
-#           jsonPointers:
-#             - /data
+#       
