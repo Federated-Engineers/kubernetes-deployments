@@ -32,7 +32,7 @@ spec:
             valueFiles:
             - $values/{{variant}}-airflow-values.yaml
         - repoURL: https://github.com/org/cd-repo.git
-          targetRevision: main
+          targetRevision: appset-test
           path: application-deployments/data-apps/production-values/
           ref: values
       destination:
