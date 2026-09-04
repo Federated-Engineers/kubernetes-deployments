@@ -1,0 +1,47 @@
+apiVersion: v2
+appVersion: "v0.93.1"
+dependencies:
+- name: kube-prometheus-stack
+  repository: "@prometheus-community"
+  version: 88.6.2
+# - name: prometheus-statsd-exporter
+#   repository: "@prometheus-community"
+#   version: 1.0.0
+description: Federated Engineers Monitoring stack. The kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards,
+  and Prometheus rules combined with documentation and scripts to provide easy to
+  operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus
+  Operator.
+home: https://github.com/prometheus-operator/kube-prometheus
+icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+keywords:
+- operator
+- prometheus
+- kube-prometheus
+maintainers:
+- email: andrew@quadcorps.co.uk
+  name: andrewgkew
+  url: https://github.com/andrewgkew
+- email: gianrubio@gmail.com
+  name: gianrubio
+  url: https://github.com/gianrubio
+- email: github.gkarthiks@gmail.com
+  name: gkarthiks
+  url: https://github.com/gkarthiks
+- email: kube-prometheus-stack@sisti.pt
+  name: GMartinez-Sisti
+  url: https://github.com/GMartinez-Sisti
+- email: github@jkroepke.de
+  name: jkroepke
+  url: https://github.com/jkroepke
+- email: miroslav.hadzhiev@gmail.com
+  name: Xtigyro
+  url: https://github.com/Xtigyro
+- email: quentin.bisson@gmail.com
+  name: QuentinBisson
+  url: https://github.com/QuentinBisson
+name: fe-kube-prometheus-stack
+sources:
+- https://github.com/prometheus-community/helm-charts
+- https://github.com/prometheus-operator/kube-prometheus
+type: application
+version: 0.1.0
