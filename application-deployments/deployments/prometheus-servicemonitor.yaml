@@ -1,11 +1,11 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: monitoring-airflow-statsd-servicemonitor
+  name: airflow-statsd-exporter
   # VARIABLE change to current kubernetes cluster namespace
   namespace: monitoring
   labels:
-    release: monitoring
+    release: prometheus-grafana
 spec:
   selector:
     matchLabels:
