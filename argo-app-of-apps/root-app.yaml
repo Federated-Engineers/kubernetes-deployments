@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
-    targetRevision: HEAD
+    targetRevision: appset-test
     path: argo-app-of-apps/apps
     directory:
       recurse: true
