@@ -48,4 +48,4 @@ spec:
           allowEmpty: false
         syncOptions:
         - CreateNamespace=true
-        - ApplyOutofSyncOnly=true
+        # - ApplyOutofSyncOnly=true
