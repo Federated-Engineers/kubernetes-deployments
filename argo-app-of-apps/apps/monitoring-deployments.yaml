@@ -7,22 +7,21 @@
 #     name: prometheus-grafana-crds
 #   finalizers:
 #     - resources-finalizer.argocd.argoproj.io
-#   spec:
-#     project: default
+# spec:
+#   project: default
 
-#     source:
-#       repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-#       targetRevision: appset-test
-#       path: application-deployments/deployments/
-  
-#     destination:
-#       server: https://kubernetes.default.svc
-#       namespace: monitoring
-      
-#     syncPolicy:
-#       automated:
-#         prune: true
-#         selfHeal: true
-#         allowEmpty: false
-#       syncOptions:
-#       - CreateNamespace=true
+#   source:
+#     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+#     targetRevision: appset-test
+#     path: application-deployments/deployments/
+
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: monitoring
+    
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#     - CreateNamespace=true
