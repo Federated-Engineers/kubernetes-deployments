@@ -13,7 +13,7 @@ spec:
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
     targetRevision: appset-test
-    path: 'application-deployments/monitoring'
+    path: 'application-deployments/charts/kube-prometheus-stack'
 
   destination:
     server: https://kubernetes.default.svc
