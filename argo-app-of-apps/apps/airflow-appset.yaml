@@ -17,9 +17,9 @@ spec:
           namespace: forge-airflow
   template:
     metadata:
-      name: '{{variant}}'
+      name: '{{.variant}}'
       labels:
-        name: '{{variant}}-airflow'
+        name: '{{.variant}}-airflow'
       finalizers:
         - resources-finalizer.argocd.argoproj.io
     spec:
@@ -30,14 +30,14 @@ spec:
           path: application-deployments/data-apps/charts/airflow/
           helm:
             valueFiles:
-            - $values/{{variant}}-airflow-values.yaml
+            - $values/{{.variant}}-airflow-values.yaml
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
           targetRevision: appset-test
           path: application-deployments/production-values/
           ref: values
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{namespace}}'
+        namespace: '{{.namespace}}'
       syncPolicy:
         automated:
           prune: true
