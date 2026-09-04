@@ -34,8 +34,7 @@ spec:
       source:
         repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
         targetRevision: appset-test
-        path: 
-        - application-deployments/deployments/{{.filename}}.yaml
+        path: application-deployments/deployments/{{.filename}}.yaml
     
       destination:
         server: https://kubernetes.default.svc
@@ -48,4 +47,4 @@ spec:
           allowEmpty: false
         syncOptions:
         - CreateNamespace=true
-        # - ApplyOutofSyncOnly=true
+        - ApplyOutofSyncOnly=true
