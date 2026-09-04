@@ -34,7 +34,7 @@ spec:
       sources:
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
           targetRevision: appset-test
-          path: $values/{{.filename}}.yaml
+          path: $values/application-deployments/deployments/{{.filename}}.yaml
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
           targetRevision: appset-test
           path: application-deployments/deployments/
