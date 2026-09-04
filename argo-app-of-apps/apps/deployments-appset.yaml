@@ -21,33 +21,33 @@ spec:
           # label: elite-airflow
           # path: elite-airflow
         #   namespace: forge-airflow
-template:
-  metadata:
-    name: '{{variant}}'
-    labels:
-      name: '{{label}}'
-    finalizers:
-      - resources-finalizer.argocd.argoproj.io
-  spec:
-    project: default
+  template:
+    metadata:
+      name: '{{variant}}'
+      labels:
+        name: '{{label}}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
 
-    source:
-      - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-        targetRevision: appset-test
-        path: '$values/{{filename}}.yaml'
-      - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-        targetRevision: appset-test
-        path: application-deployments/deployments/
-        ref: values
+      source:
+        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+          targetRevision: appset-test
+          path: '$values/{{filename}}.yaml'
+        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+          targetRevision: appset-test
+          path: application-deployments/deployments/
+          ref: values
 
-    destination:
-      server: https://kubernetes.default.svc
-      namespace: '{{namespace}}'
-      
-    syncPolicy:
-      automated:
-        prune: true
-        selfHeal: true
-        allowEmpty: false
-      syncOptions:
-      - CreateNamespace=true
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+        
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+        - CreateNamespace=true
