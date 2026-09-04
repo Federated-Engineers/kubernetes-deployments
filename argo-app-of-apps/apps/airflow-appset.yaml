@@ -1,0 +1,47 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: da-appset-airflow
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+        - variant: elite
+          namespace: elite-airflow
+        - variant: flux
+          namespace: flux-airflow
+        - variant: forge
+          namespace: forge-airflow
+  template:
+    metadata:
+      name: '{{variant}}'
+      labels:
+        name: '{{variant}}-airflow'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+      - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+        targetRevision: appset-test
+        path: application-deployments/data-apps/charts/airflow/
+        helm:
+          valueFiles:
+          - $values/{{variant}}-airflow-values.yaml
+      - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+        targetRevision: appset-test
+        path: application-deployments/data-apps/production-values/
+        ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false    
+        syncOptions:
+        - CreateNamespace=true
