@@ -27,7 +27,7 @@ spec:
       sources:
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
           targetRevision: appset-test
-          path: application-deployments/data-apps/charts/airflow/
+          path: application-deployments/charts/airflow/
           helm:
             valueFiles:
             - $values/{{.variant}}-airflow-values.yaml
