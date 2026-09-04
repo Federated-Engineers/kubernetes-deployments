@@ -1,45 +1,45 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: ApplicationSet
-# metadata:
-#   name: fe-airflow-stack
-#   namespace: argocd
-# spec:
-#   goTemplate: true
-#   goTemplateOptions: ["missingkey=error"]
-#   generators:
-#   - list:
-#       elements:
-#         - variant: elite
-#           namespace: elite-airflow
-#         - variant: flux
-#           namespace: flux-airflow
-#         - variant: forge
-#           namespace: forge-airflow
-#   template:
-#     metadata:
-#       name: '{{.variant}}'
-#       labels:
-#         name: '{{.variant}}-airflow'
-#       finalizers:
-#         - resources-finalizer.argocd.argoproj.io
-#     spec:
-#       project: default
-#       sources:
-#         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-#           targetRevision: appset-test
-#           path: application-deployments/charts/airflow/
-#           helm:
-#             valueFiles:
-#             - $values/application-deployments/production-values/{{.variant}}-airflow-values.yaml
-#         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-#           targetRevision: appset-test
-#           ref: values
-#       destination:
-#         server: https://kubernetes.default.svc
-#         namespace: '{{.namespace}}'
-#       syncPolicy:
-#         automated:
-#           prune: true
-#           selfHeal: true    
-#         syncOptions:
-#         - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: fe-airflow-stack
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+        - variant: elite
+          namespace: elite-airflow
+        - variant: flux
+          namespace: flux-airflow
+        - variant: forge
+          namespace: forge-airflow
+  template:
+    metadata:
+      name: '{{.variant}}'
+      labels:
+        name: '{{.variant}}-airflow'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+          targetRevision: appset-test
+          path: application-deployments/charts/airflow/
+          helm:
+            valueFiles:
+            - $values/application-deployments/production-values/{{.variant}}-airflow-values.yaml
+        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+          targetRevision: appset-test
+          ref: values
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true    
+        syncOptions:
+        - CreateNamespace=true
