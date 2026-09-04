@@ -31,15 +31,12 @@ spec:
     spec:
       project: default
 
-      sources:
-        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-          targetRevision: appset-test
-          path: $values/application-deployments/deployments/{{.filename}}.yaml
-        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-          targetRevision: appset-test
-          path: application-deployments/deployments/
-          ref: values
-
+      source:
+        repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+        targetRevision: appset-test
+        path: 
+        - application-deployments/deployments/{{.filename}}.yaml
+    
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{.namespace}}'
