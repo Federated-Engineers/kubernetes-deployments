@@ -30,10 +30,9 @@ spec:
           path: application-deployments/charts/airflow/
           helm:
             valueFiles:
-            - $values/{{.variant}}-airflow-values.yaml
+            - $values/application-deployments/production-values/{{.variant}}-airflow-values.yaml
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
           targetRevision: appset-test
-          path: application-deployments/production-values/
           ref: values
       destination:
         server: https://kubernetes.default.svc
