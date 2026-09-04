@@ -25,16 +25,16 @@ spec:
     spec:
       project: default
       source:
-      - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-        targetRevision: appset-test
-        path: application-deployments/data-apps/charts/airflow/
-        helm:
-          valueFiles:
-          - $values/{{variant}}-airflow-values.yaml
-      - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-        targetRevision: appset-test
-        path: application-deployments/data-apps/production-values/
-        ref: values
+        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+          targetRevision: appset-test
+          path: application-deployments/data-apps/charts/airflow/
+          helm:
+            valueFiles:
+            - $values/{{variant}}-airflow-values.yaml
+        - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
+          targetRevision: appset-test
+          path: application-deployments/production-values/
+          ref: values
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
