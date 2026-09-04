@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: 'monitoring-stack'
+  name: 'prometheus-grafana-crds'
   namespace: argocd
   labels:
-    name: 'prometheus-grafana'
+    name: 'prometheus-grafana-crds'
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
