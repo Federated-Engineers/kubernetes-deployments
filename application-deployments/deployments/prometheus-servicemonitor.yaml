@@ -11,11 +11,16 @@ spec:
     matchLabels:
       tier: airflow
       component: statsd
-      release: airflow
+    matchExpressions:
+      - key: release
+        operator: In
+        values:
+          - flux
+          - elite
+          - forge
   namespaceSelector:
     # VARIABLE change to current kubernetes cluster namespace
     matchNames:
-      - airflow
       - elite-airflow
       - forge-airflow
       - flux-airflow
