@@ -24,7 +24,7 @@ spec:
         - resources-finalizer.argocd.argoproj.io
     spec:
       project: default
-      sources:
+      source:
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
           targetRevision: appset-test
           path: application-deployments/data-apps/charts/airflow/
