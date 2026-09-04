@@ -26,13 +26,13 @@ spec:
       project: default
       sources:
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-          targetRevision: appset-test
+          targetRevision: refs/heads/appset-test
           path: application-deployments/charts/airflow/
           helm:
             valueFiles:
             - $values/application-deployments/production-values/{{.variant}}-airflow-values.yaml
         - repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-          targetRevision: appset-test
+          targetRevision: refs/heads/appset-test
           ref: values
       destination:
         server: https://kubernetes.default.svc
@@ -43,3 +43,24 @@ spec:
           selfHeal: true    
         syncOptions:
         - CreateNamespace=true
+      ignoreDifferences:
+        - group: ""
+          kind: Secret
+          name: airflow-webserver-secret-key
+          jsonPointers:
+            - /data
+        - group: ""
+          kind: Secret
+          name: airflow-fernet-key
+          jsonPointers:
+            - /data
+        - group: ""
+          kind: Secret
+          name: airflow-redis-password
+          jsonPointers:
+            - /data
+        - group: ""
+          kind: Secret
+          name: airflow-broker-url
+          jsonPointers:
+            - /data

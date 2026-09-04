@@ -14,7 +14,7 @@ spec:
 
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-    targetRevision: appset-test
+    targetRevision: refs/heads/appset-test
     path: 'application-deployments/charts/kube-prometheus-stack'
 
   destination:
