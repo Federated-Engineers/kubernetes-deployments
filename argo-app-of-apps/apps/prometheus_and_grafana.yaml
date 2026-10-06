@@ -15,7 +15,7 @@ spec:
 
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git
-    targetRevision: refs/heads/main
+    targetRevision: HEAD
     path: 'application-deployments/charts/kube-prometheus-stack'
 
   destination:
