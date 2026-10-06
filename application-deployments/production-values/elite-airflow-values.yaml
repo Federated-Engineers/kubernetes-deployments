@@ -79,8 +79,8 @@ airflowVersion: "3.0.2"
 # Images
 images:
   airflow:
-    repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/flux-airflow
-    tag: version-94b80d4c5603e5f1b6a272b5738e3a57d526705d
+    repository: 049417293525.dkr.ecr.eu-central-1.amazonaws.com/elite-airflow
+    tag: version-dd6af27178661718c71786c3e29007bd3e1679d0
 
     # Specifying digest takes precedence over tag.
     digest: ~
@@ -698,7 +698,7 @@ workers:
 
     # Annotations to add to worker kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Allow KEDA autoscaling for Airflow Celery workers
   keda:
@@ -1066,7 +1066,7 @@ scheduler:
 
     # Annotations to add to scheduler kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Scheduler pod disruption budget
   podDisruptionBudget:
@@ -1233,7 +1233,7 @@ createUserJob:
 
     # Annotations to add to create user kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Launch additional containers into user creation job
   extraContainers: []
@@ -1264,7 +1264,7 @@ createUserJob:
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
   useHelmHooks: false # modified
-  applyCustomEnv: true
+  applyCustomEnv: false
 
   env: []
 
@@ -1329,7 +1329,7 @@ migrateDatabaseJob:
 
     # Annotations to add to migrate database job kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   resources: {}
   #  limits:
@@ -1368,7 +1368,7 @@ migrateDatabaseJob:
   # In case you need to disable the helm hooks that create the jobs after install.
   # Disable this if you are using ArgoCD for example
   useHelmHooks: false
-  applyCustomEnv: true
+  applyCustomEnv: false
   env: []
 
 apiServer:
@@ -1399,7 +1399,7 @@ apiServer:
 
     # Annotations to add to Airflow API server kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
   service:
     type: LoadBalancer
     ## service annotations
@@ -1619,7 +1619,7 @@ webserver:
 
     # Annotations to add to webserver kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # Webserver pod disruption budget
   podDisruptionBudget:
@@ -1819,7 +1819,7 @@ triggerer:
 
     # Annotations to add to triggerer kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
@@ -2036,7 +2036,7 @@ dagProcessor:
 
     # Annotations to add to dag processor kubernetes service account.
     annotations: 
-      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-flux-airflow-role
+      eks.amazonaws.com/role-arn: arn:aws:iam::049417293525:role/eks-elite-airflow-role
 
   # When not set, the values defined in the global securityContext will be used
   securityContext: {}
@@ -3093,4 +3093,4 @@ logs:
     ## the name of an existing PVC to use
     existingClaim: airflow-logs
 
-secretNamespace: flux-airflow
+secretNamespace: elite-airflow

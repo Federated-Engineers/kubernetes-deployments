@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: airflow-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  metrics.json: |
+    {
+      "uid": "Airflow",
+      "title": "Apache Airflow Monitoring",
+      "tags": ["airflow"],
+      "timezone": "browser",
+      "panels": [
+        {
+          "id": 1,
+          "title": "DAG Runs by State",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "sum by (state) (airflow_dag_runs_total)",
+              "legendFormat": "{{state}}"
+            }
+          ],
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+        },
+        {
+          "id": 2,
+          "title": "Task Instances by State",
+          "type": "piechart",
+          "targets": [
+            {
+              "expr": "sum by (state) (airflow_task_instances_total)",
+              "legendFormat": "{{state}}"
+            }
+          ],
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+        },
+        {
+          "id": 3,
+          "title": "DAG Run Duration",
+          "type": "graph",
+          "targets": [
+            {
+              "expr": "airflow_dag_run_duration_seconds",
+              "legendFormat": "{{dag_id}}"
+            }
+          ],
+          "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8}
+        },
+        {
+          "id": 4,
+          "title": "Failed DAGs (Last 24h)",
+          "type": "table",
+          "targets": [
+            {
+              "expr": "increase(airflow_dag_runs_total{state=\"failed\"}[24h]) > 0",
+              "format": "table"
+            }
+          ],
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+        },
+        {
+          "id": 5,
+          "title": "System Resources",
+          "type": "graph",
+          "targets": [
+            {
+              "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+              "legendFormat": "CPU Usage %"
+            },
+            {
+              "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+              "legendFormat": "Memory Usage %"
+            }
+          ],
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+        }
+      ],
+      "time": {"from": "now-24h", "to": "now"},
+      "refresh": "30s"
+    }
+    

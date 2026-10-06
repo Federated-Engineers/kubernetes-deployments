@@ -1,0 +1,29 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: airflow-statsd-exporter
+  # VARIABLE change to current kubernetes cluster namespace
+  namespace: monitoring
+  labels:
+    release: prometheus-grafana
+spec:
+  selector:
+    matchLabels:
+      tier: airflow
+      component: statsd
+    matchExpressions:
+      - key: release
+        operator: In
+        values:
+          - flux
+          - elite
+          - forge
+  namespaceSelector:
+    # VARIABLE change to current kubernetes cluster namespace
+    matchNames:
+      - elite-airflow
+      - forge-airflow
+      - flux-airflow
+  endpoints:
+  - port: statsd-scrape
+    interval: 30s

@@ -1,31 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: elite-airflow
-  namespace: default
+  name: airbyte
+  namespace: argocd
+  labels:
+    name: airbyte
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  labels:
-    name: airflow
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
 spec:
   project: default
 
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
     targetRevision: HEAD
-    path: applications/charts/airflow/
+    path: application-deployments/charts/airbyte/
     helm:
       valueFiles:
-      - ../../production-values/elite-airflow-values.yaml
+      - values.yaml
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: elite-airflow
+    namespace: airbyte
 
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
       allowEmpty: false
-    syncOptions: 
+      syncOptions:
       - CreateNamespace=true
+      - ApplyOutofSyncOnly=true

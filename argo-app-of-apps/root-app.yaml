@@ -1,29 +1,30 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: airbyte
-  namespace: default
+  name: root-app
+  namespace: argocd
+  labels:
+    name: App-of-apps
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  labels:
-    name: airbyte
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
 spec:
   project: default
-
   source:
     repoURL: https://github.com/Federated-Engineers/kubernetes-deployments.git 
-    targetRevision: HEAD
-    path: applications/charts/airbyte/
-    helm:
-      valueFiles:
-      - values.yaml
-
+    targetRevision: refs/heads/main
+    path: argo-app-of-apps/apps
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
-
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-      allowEmpty: false
+      allowEmpty: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
